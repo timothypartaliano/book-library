@@ -7,7 +7,7 @@ const response = (statusCode, data, message, res) => {
             next: "",
             current: "",
         },
-    });
+    })
 }
 
-module.exports = response;
+module.exports = response
