@@ -37,7 +37,7 @@ exports.addBook = (req, res) => {
         readPage,
         finished,
         reading
-    } = req.body;
+    } = req.body
 
     const sql = `
         INSERT INTO books (
@@ -52,8 +52,8 @@ exports.addBook = (req, res) => {
             reading
         )
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-        RETURNING *;
-    `;
+        RETURNING *
+    `
 
     const values = [
         name,
@@ -65,20 +65,20 @@ exports.addBook = (req, res) => {
         readPage,
         finished,
         reading
-    ];
+    ]
 
     db.query(sql, values, (err, result) => {
         if (err) {
             console.error(err);
-            response(500, null, "Internal Server Error", res);
+            response(500, null, "Internal Server Error", res)
         } else {
-            response(201, result.rows[0], "Book added successfully", res);
+            response(201, result.rows[0], "Book added successfully", res)
         }
-    });
-};
+    })
+}
 
 exports.editBookById = (req, res) => {
-    const bookId = req.params.id; // Assuming the book ID is passed in the request params
+    const bookId = req.params.id
 
     const {
         name,
@@ -90,7 +90,7 @@ exports.editBookById = (req, res) => {
         readPage,
         finished,
         reading
-    } = req.body;
+    } = req.body
 
     const sql = `
         UPDATE books
@@ -106,8 +106,8 @@ exports.editBookById = (req, res) => {
             reading = $9,
             updatedAt = CURRENT_TIMESTAMP
         WHERE id = $10
-        RETURNING *;
-    `;
+        RETURNING *
+    `
 
     const values = [
         name,
@@ -120,16 +120,37 @@ exports.editBookById = (req, res) => {
         finished,
         reading,
         bookId
-    ];
+    ]
 
     db.query(sql, values, (err, result) => {
         if (err) {
-            console.error(err);
-            response(500, null, "Internal Server Error", res);
+            console.error(err)
+            response(500, null, "Internal Server Error", res)
         } else if (result.rows.length === 0) {
-            response(404, null, "Book not found", res);
+            response(404, null, "Book not found", res)
         } else {
-            response(200, result.rows[0], "Book updated successfully", res);
+            response(200, result.rows[0], "Book updated successfully", res)
         }
-    });
-};
+    })
+}
+
+exports.deleteBookById = (req, res) => {
+    const bookId = req.params.id
+
+    const sql = `
+        DELETE FROM books
+        WHERE id = $1
+        RETURNING *
+    `
+
+    db.query(sql, [bookId], (err, result) => {
+        if (err) {
+            console.error(err)
+            response(500, null, "Internal Server Error", res)
+        } else if (result.rows.length === 0) {
+            response(404, null, "Book not found", res)
+        } else {
+            response(200, result.rows[0], "Book deleted successfully", res)
+        }
+    })
+}
