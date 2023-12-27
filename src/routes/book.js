@@ -12,5 +12,6 @@ router.get('/', (req, res) => {
 router.get('/books', bookController.getAllBooks);
 router.get('/books/:id', bookController.getBookById);
 router.post('/books', bookController.addBook);
+router.put('/books/:id', bookController.editBookById);
 
 module.exports = router;

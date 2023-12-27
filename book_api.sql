@@ -22,3 +22,29 @@ VALUES
     ('1984', 1949, 'George Orwell', 'A dystopian novel set in a totalitarian society', 'Secker & Warburg', 328, 150, true, false),
     ('The Catcher in the Rye', 1951, 'J.D. Salinger', 'A story about teenage angst and alienation', 'Little, Brown and Company', 224, 80, false, true),
     ('Pride and Prejudice', 1813, 'Jane Austen', 'A romantic novel set in the early 19th century', 'T. Egerton, Whitehall', 279, 50, false, true);
+
+/*dummy data for inserting json*/
+{
+    "name": "Dummy Book",
+    "year": 2023,
+    "author": "John Doe",
+    "summary": "A fictional book for testing purposes",
+    "publisher": "Test Publications",
+    "pageCount": 200,
+    "readPage": 50,
+    "finished": false,
+    "reading": true
+}
+
+/*dummy data for updating json*/
+{
+    "name": "Updated Book Title",
+    "year": 2024,
+    "author": "Jane Doe",
+    "summary": "An updated fictional book",
+    "publisher": "Updated Publications",
+    "pageCount": 250,
+    "readPage": 100,
+    "finished": true,
+    "reading": false
+}
