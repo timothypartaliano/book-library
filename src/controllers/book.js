@@ -1,14 +1,29 @@
-const db = require('../config/connection')
+// const db = require('../config/connection')
+const sequelize = require('../config/connection');
 const response = require('../utils/response')
+const Book = require('../models/book')
 
-exports.getAllBooks = (req, res) => {
-    const sql = "SELECT * FROM books"
-
-    db.query(sql, (err, fields) => {
-        if (err) throw err;
-        response(200, fields, "Get All Books", res)
-    })
+exports.getAllBooks = async (req, res) => {
+    try {
+        await sequelize.authenticate();
+        console.log(Book)
+        const books = await Book.findAll({ where: {} });
+        response(200, books, "Get All Books", res)
+    } catch (error) {
+        console.error(error)
+        response(500, null, "Internal Server Error", res)
+    }
 }
+
+/*Function using native query option*/
+// exports.getAllBooks = (req, res) => {
+//     const sql = "SELECT * FROM books"
+
+//     db.query(sql, (err, fields) => {
+//         if (err) throw err;
+//         response(200, fields, "Get All Books", res)
+//     })
+// }
 
 exports.getBookById = (req, res) => {
     const bookId = req.params.id;
