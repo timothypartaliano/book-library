@@ -40,10 +40,12 @@ const Book = sequelize.define('Book', {
     insertedAt: {
         type: DataTypes.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        field: 'insertedat',
     },
     updatedAt: {
         type: DataTypes.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        field: 'updatedat',
     },
 }, {
     tableName: 'books',
