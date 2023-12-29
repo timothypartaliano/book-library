@@ -5,8 +5,6 @@ const Book = require('../models/book')
 
 exports.getAllBooks = async (req, res) => {
     try {
-        await sequelize.authenticate();
-        console.log(Book)
         const books = await Book.findAll({ where: {} });
         response(200, books, "Get All Books", res)
     } catch (error) {
@@ -15,7 +13,7 @@ exports.getAllBooks = async (req, res) => {
     }
 }
 
-/*Function using native query option*/
+/*Function getAll using native query option*/
 // exports.getAllBooks = (req, res) => {
 //     const sql = "SELECT * FROM books"
 
@@ -25,21 +23,37 @@ exports.getAllBooks = async (req, res) => {
 //     })
 // }
 
-exports.getBookById = (req, res) => {
+exports.getBookById = async (req, res) => {
     const bookId = req.params.id;
-    const sql = "SELECT * FROM books WHERE id = $1"
-
-    db.query(sql, [bookId], (err, result) => {
-        if (err) {
-            console.log(err)
-            response(500, null, "Internal Server Error", res)
-        } else if (result.rows.length === 0) {
-            response(404, null, "Book not found", res)
+    try {
+        const book = await Book.findByPk(bookId);
+        if (!book) {
+            response(404, null, "Book not found", res);
         } else {
-            response(200, result.rows[0], "Get Book by ID", res)
+            response(200, book.toJSON(), "Get Book by ID", res);
         }
-    })
-}
+    } catch (error) {
+        console.error('Error fetching book by ID:', error);
+        response(500, null, "Internal Server Error", res);
+    }
+};
+
+/*Function getById using native query option */
+// exports.getBookById = (req, res) => {
+//     const bookId = req.params.id;
+//     const sql = "SELECT * FROM books WHERE id = $1"
+
+//     db.query(sql, [bookId], (err, result) => {
+//         if (err) {
+//             console.log(err)
+//             response(500, null, "Internal Server Error", res)
+//         } else if (result.rows.length === 0) {
+//             response(404, null, "Book not found", res)
+//         } else {
+//             response(200, result.rows[0], "Get Book by ID", res)
+//         }
+//     })
+// }
 
 exports.addBook = (req, res) => {
     const {
