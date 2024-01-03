@@ -13,16 +13,6 @@ exports.getAllBooks = async (req, res) => {
     }
 }
 
-/*Function getAll using native query option*/
-// exports.getAllBooks = (req, res) => {
-//     const sql = "SELECT * FROM books"
-
-//     db.query(sql, (err, fields) => {
-//         if (err) throw err;
-//         response(200, fields, "Get All Books", res)
-//     })
-// }
-
 exports.getBookById = async (req, res) => {
     const bookId = req.params.id;
     try {
