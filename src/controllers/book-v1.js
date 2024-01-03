@@ -79,3 +79,61 @@ exports.addBook = (req, res) => {
         }
     })
 }
+
+/*Function editById using native query option */
+exports.editBookById = (req, res) => {
+    const bookId = req.params.id
+
+    const {
+        name,
+        year,
+        author,
+        summary,
+        publisher,
+        pageCount,
+        readPage,
+        finished,
+        reading
+    } = req.body
+
+    const sql = `
+        UPDATE books
+        SET
+            name = $1,
+            year = $2,
+            author = $3,
+            summary = $4,
+            publisher = $5,
+            pageCount = $6,
+            readPage = $7,
+            finished = $8,
+            reading = $9,
+            updatedAt = CURRENT_TIMESTAMP
+        WHERE id = $10
+        RETURNING *
+    `
+
+    const values = [
+        name,
+        year,
+        author,
+        summary,
+        publisher,
+        pageCount,
+        readPage,
+        finished,
+        reading,
+        bookId
+    ]
+
+    db.query(sql, values, (err, result) => {
+        if (err) {
+            console.error(err)
+            response(500, null, "Internal Server Error", res)
+        } else if (result.rows.length === 0) {
+            response(404, null, "Book not found", res)
+        } else {
+            response(200, result.rows[0], "Book updated successfully", res)
+        }
+    })
+}
