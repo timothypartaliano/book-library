@@ -240,23 +240,47 @@ exports.editBookById = async (req, res) => {
 //     })
 // }
 
-exports.deleteBookById = (req, res) => {
+exports.deleteBookById = async (req, res) => {
     const bookId = req.params.id
 
-    const sql = `
-        DELETE FROM books
-        WHERE id = $1
-        RETURNING *
-    `
+    try {
+        const bookToDelete = await Book.findByPk(bookId)
 
-    db.query(sql, [bookId], (err, result) => {
-        if (err) {
-            console.error(err)
-            response(500, null, "Internal Server Error", res)
-        } else if (result.rows.length === 0) {
+
+        if (!bookToDelete) {
             response(404, null, "Book not found", res)
-        } else {
-            response(200, result.rows[0], "Book deleted successfully", res)
+            return
         }
-    })
+
+        await Book.destroy({
+            where: { id: bookId},
+        })
+
+        response(200, bookToDelete.toJSON(),"Book deleted successfully", res)
+    } catch (error) {
+        console.error('Error deleting book:', error)
+        response(500, null, "Internal Server Error", res)
+    }
 }
+
+/*Function deleteById using native query option */
+// exports.deleteBookById = (req, res) => {
+//     const bookId = req.params.id
+
+//     const sql = `
+//         DELETE FROM books
+//         WHERE id = $1
+//         RETURNING *
+//     `
+
+//     db.query(sql, [bookId], (err, result) => {
+//         if (err) {
+//             console.error(err)
+//             response(500, null, "Internal Server Error", res)
+//         } else if (result.rows.length === 0) {
+//             response(404, null, "Book not found", res)
+//         } else {
+//             response(200, result.rows[0], "Book deleted successfully", res)
+//         }
+//     })
+// }
