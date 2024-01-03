@@ -137,3 +137,25 @@ exports.editBookById = (req, res) => {
         }
     })
 }
+
+/*Function deleteById using native query option */
+exports.deleteBookById = (req, res) => {
+    const bookId = req.params.id
+
+    const sql = `
+        DELETE FROM books
+        WHERE id = $1
+        RETURNING *
+    `
+
+    db.query(sql, [bookId], (err, result) => {
+        if (err) {
+            console.error(err)
+            response(500, null, "Internal Server Error", res)
+        } else if (result.rows.length === 0) {
+            response(404, null, "Book not found", res)
+        } else {
+            response(200, result.rows[0], "Book deleted successfully", res)
+        }
+    })
+}
