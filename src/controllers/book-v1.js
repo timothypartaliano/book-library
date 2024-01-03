@@ -27,3 +27,55 @@ exports.getBookById = (req, res) => {
         }
     })
 }
+
+/*Function addBook using native query option */
+exports.addBook = (req, res) => {
+    const {
+        name,
+        year,
+        author,
+        summary,
+        publisher,
+        pageCount,
+        readPage,
+        finished,
+        reading
+    } = req.body
+
+    const sql = `
+        INSERT INTO books (
+            name,
+            year,
+            author,
+            summary,
+            publisher,
+            pageCount,
+            readPage,
+            finished,
+            reading
+        )
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+        RETURNING *
+    `
+
+    const values = [
+        name,
+        year,
+        author,
+        summary,
+        publisher,
+        pageCount,
+        readPage,
+        finished,
+        reading
+    ]
+
+    db.query(sql, values, (err, result) => {
+        if (err) {
+            console.error(err);
+            response(500, null, "Internal Server Error", res)
+        } else {
+            response(201, result.rows[0], "Book added successfully", res)
+        }
+    })
+}
