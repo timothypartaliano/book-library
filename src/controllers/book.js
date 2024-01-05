@@ -1,4 +1,3 @@
-// const db = require('../config/connection')
 const sequelize = require('../config/connection');
 const response = require('../utils/response')
 const Book = require('../models/book')
@@ -40,6 +39,16 @@ exports.addBook = async (req, res) => {
         finished,
         reading
     } = req.body
+
+    // Check if required fields are present and have valid values
+    if (!name || !year || !author || !summary || !publisher || !pageCount || !readPage || finished === undefined || reading === undefined) {
+        return response(400, null, "Bad Request: Missing or invalid parameters", res);
+    }
+
+    // Validate data types and values
+    if (typeof name !== 'string' || typeof year !== 'number' || typeof author !== 'string' || typeof summary !== 'string' || typeof publisher !== 'string' || typeof pageCount !== 'number' || typeof readPage !== 'number' || typeof finished !== 'boolean' || typeof reading !== 'boolean') {
+        return response(400, null, "Bad Request: Invalid data types", res);
+    }
 
     try {
         const newBook = await Book.create({
