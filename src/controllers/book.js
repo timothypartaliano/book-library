@@ -101,12 +101,28 @@ exports.editBookById = async (req, res) => {
     } = req.body
 
     // Check if required fields are present and have valid values
-    if (!name || !year || !author || !summary || !publisher || !pageCount || !readPage || finished === undefined || reading === undefined) {
-        return response(400, null, "Bad Request: Missing or invalid parameters", res);
+    if (typeof name !== 'string' || 
+        typeof year !== 'number' || 
+        typeof author !== 'string' || 
+        typeof summary !== 'string' || 
+        typeof publisher !== 'string' || 
+        typeof pageCount !== 'number' || 
+        typeof readPage !== 'number' || 
+        typeof finished !== 'boolean' || 
+        typeof reading !== 'boolean') {
+        return response(400, null, "Bad Request: Invalid data types", res);
     }
 
     // Validate data types and values
-    if (typeof name !== 'string' || typeof year !== 'number' || typeof author !== 'string' || typeof summary !== 'string' || typeof publisher !== 'string' || typeof pageCount !== 'number' || typeof readPage !== 'number' || typeof finished !== 'boolean' || typeof reading !== 'boolean') {
+    if (typeof name !== 'string' || 
+        typeof year !== 'number' || 
+        typeof author !== 'string' || 
+        typeof summary !== 'string' || 
+        typeof publisher !== 'string' || 
+        typeof pageCount !== 'number' || 
+        typeof readPage !== 'number' || 
+        typeof finished !== 'boolean' || 
+        typeof reading !== 'boolean') {
         return response(400, null, "Bad Request: Invalid data types", res);
     }
 
